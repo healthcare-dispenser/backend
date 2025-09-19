@@ -1,4 +1,4 @@
-package kr.ac.suwon.dispenser.profile.domain;
+package kr.ac.suwon.dispenser.profile.domain.tag;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

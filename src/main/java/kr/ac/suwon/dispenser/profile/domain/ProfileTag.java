@@ -1,6 +1,8 @@
 package kr.ac.suwon.dispenser.profile.domain;
 
 import jakarta.persistence.*;
+import kr.ac.suwon.dispenser.profile.domain.tag.ProfileTagId;
+import kr.ac.suwon.dispenser.profile.domain.tag.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -2,6 +2,8 @@ package kr.ac.suwon.dispenser.profile.domain;
 
 import jakarta.persistence.*;
 import kr.ac.suwon.dispenser.account.domain.Account;
+import kr.ac.suwon.dispenser.profile.domain.condition.Condition;
+import kr.ac.suwon.dispenser.profile.domain.tag.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,15 +30,12 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProfileTag> tags = new HashSet<>();
 
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProfileCondition> conditions = new HashSet<>();
+
     private String name;
     private Double height;
     private Double weight;
-
-    private boolean pregnant;
-    private boolean kidneyDisease;
-    private boolean liverDisease;
-    private boolean cardiovascular;
-
     @Builder(access = AccessLevel.PRIVATE)
     public Profile(Account account, String name, Double height, Double weight) {
         this.account = account;
@@ -56,6 +55,11 @@ public class Profile {
     public void addTag(Tag tag) {
         ProfileTag profileTag = ProfileTag.create(this, tag);
         tags.add(profileTag);
+    }
+
+    public void addCondition(Condition condition) {
+        ProfileCondition profileCondition = ProfileCondition.create(this, condition);
+        conditions.add(profileCondition);
     }
 
 
