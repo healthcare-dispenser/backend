@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -16,5 +18,9 @@ public class TagService {
 
     public Tag findByCode(TagCode tagCode) {
         return tagRepository.findByCode(tagCode).orElseThrow(() -> new RuntimeException("존재하지 않는 태그 입니다."));
+    }
+
+    public List<Tag> findAll() {
+        return tagRepository.findAll();
     }
 }
