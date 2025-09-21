@@ -1,4 +1,4 @@
-package kr.ac.suwon.dispenser.profile.dto;
+package kr.ac.suwon.dispenser.profile.dto.tag;
 
 import java.util.List;
 

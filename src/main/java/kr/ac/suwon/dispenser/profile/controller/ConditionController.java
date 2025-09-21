@@ -1,8 +1,8 @@
 package kr.ac.suwon.dispenser.profile.controller;
 
 import kr.ac.suwon.dispenser.common.AccountPrincipal;
-import kr.ac.suwon.dispenser.profile.dto.ConditionItem;
-import kr.ac.suwon.dispenser.profile.dto.ConditionListResponse;
+import kr.ac.suwon.dispenser.profile.dto.condition.ConditionItem;
+import kr.ac.suwon.dispenser.profile.dto.condition.ConditionListResponse;
 import kr.ac.suwon.dispenser.profile.service.ConditionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

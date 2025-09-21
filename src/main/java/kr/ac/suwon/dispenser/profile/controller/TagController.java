@@ -1,8 +1,8 @@
 package kr.ac.suwon.dispenser.profile.controller;
 
 import kr.ac.suwon.dispenser.common.AccountPrincipal;
-import kr.ac.suwon.dispenser.profile.dto.TagItem;
-import kr.ac.suwon.dispenser.profile.dto.TagListResponse;
+import kr.ac.suwon.dispenser.profile.dto.tag.TagItem;
+import kr.ac.suwon.dispenser.profile.dto.tag.TagListResponse;
 import kr.ac.suwon.dispenser.profile.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

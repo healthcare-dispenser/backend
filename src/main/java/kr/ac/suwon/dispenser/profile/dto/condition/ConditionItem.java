@@ -1,4 +1,4 @@
-package kr.ac.suwon.dispenser.profile.dto;
+package kr.ac.suwon.dispenser.profile.dto.condition;
 
 import kr.ac.suwon.dispenser.profile.domain.condition.ConditionCode;
 

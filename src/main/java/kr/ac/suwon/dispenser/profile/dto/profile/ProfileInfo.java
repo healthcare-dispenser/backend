@@ -1,4 +1,4 @@
-package kr.ac.suwon.dispenser.profile.dto;
+package kr.ac.suwon.dispenser.profile.dto.profile;
 
 import kr.ac.suwon.dispenser.profile.domain.Gender;
 import kr.ac.suwon.dispenser.profile.domain.condition.ConditionCode;
@@ -6,7 +6,8 @@ import kr.ac.suwon.dispenser.profile.domain.tag.TagCode;
 
 import java.util.Set;
 
-public record ProfileCreateRequest(
+public record ProfileInfo(
+        Long id,
         String name,
         Double height,
         Double weight,
