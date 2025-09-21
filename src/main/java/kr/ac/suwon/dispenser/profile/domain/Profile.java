@@ -66,5 +66,12 @@ public class Profile {
         conditions.add(profileCondition);
     }
 
+    public void updateProfile(String name, Double height, Double weight, Gender gender) {
+        this.name = name;
+        this.height = height;
+        this.weight = weight;
+        this.gender = gender;
+    }
+
 
 }

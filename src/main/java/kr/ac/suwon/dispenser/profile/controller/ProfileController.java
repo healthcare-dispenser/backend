@@ -46,4 +46,14 @@ public class ProfileController {
         profileService.deleteProfile(profileId, account.getId());
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{profileId}")
+    public ResponseEntity<ProfileItem> updateProfile(
+            @AuthenticationPrincipal AccountPrincipal account,
+            @PathVariable Long profileId,
+            @RequestBody ProfileCreateRequest request) {
+        profileService.updateProfile(account.getId(), profileId, request.name(), request.height(), request.weight(),
+                request.gender(), request.tags(), request.conditions());
+        return ResponseEntity.ok(new ProfileItem(profileId, request.name()));
+    }
 }

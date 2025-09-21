@@ -33,11 +33,7 @@ public class ProfileService {
         Account account = accountService.findById(accountId);
         Profile profile = Profile.create(account, name, height, weight, gender);
 
-        Set<Tag> tagSet = tags.stream().map(tagService::findByCode).collect(Collectors.toSet());
-        Set<Condition> conditionSet = conditions.stream().map(conditionService::findByCode).collect(Collectors.toSet());
-
-        tagSet.forEach(profile::addTag);
-        conditionSet.forEach(profile::addCondition);
+        addTagsAndConditions(tags, conditions, profile);
 
         return profileRepository.save(profile).getId();
     }
@@ -51,5 +47,25 @@ public class ProfileService {
         if (row == 0) {
             throw new RuntimeException("프로필을 찾을 수 없습니다.");
         }
+    }
+
+    public void updateProfile(Long accountId, Long profileId, String name, Double height, Double weight, Gender gender,
+                              Set<TagCode> tags, Set<ConditionCode> conditions) {
+        Profile profile = findByIdAndAccountId(accountId, profileId);
+        profile.updateProfile(name,height,weight,gender);
+
+        addTagsAndConditions(tags, conditions, profile);
+    }
+
+    public Profile findByIdAndAccountId(Long profileId, Long accountId) {
+        return profileRepository.findByIdAndAccount_Id(profileId, accountId).orElseThrow(() -> new RuntimeException("존재하지 않는 프로필 입니다."));
+    }
+
+    private void addTagsAndConditions(Set<TagCode> tags, Set<ConditionCode> conditions, Profile profile) {
+        Set<Tag> tagSet = tags.stream().map(tagService::findByCode).collect(Collectors.toSet());
+        Set<Condition> conditionSet = conditions.stream().map(conditionService::findByCode).collect(Collectors.toSet());
+
+        tagSet.forEach(profile::addTag);
+        conditionSet.forEach(profile::addCondition);
     }
 }
