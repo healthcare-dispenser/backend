@@ -68,4 +68,5 @@ public class ProfileService {
         tagSet.forEach(profile::addTag);
         conditionSet.forEach(profile::addCondition);
     }
+
 }

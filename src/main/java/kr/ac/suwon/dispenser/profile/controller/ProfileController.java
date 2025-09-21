@@ -2,7 +2,10 @@ package kr.ac.suwon.dispenser.profile.controller;
 
 import kr.ac.suwon.dispenser.common.AccountPrincipal;
 import kr.ac.suwon.dispenser.profile.domain.Profile;
+import kr.ac.suwon.dispenser.profile.domain.condition.ConditionCode;
+import kr.ac.suwon.dispenser.profile.domain.tag.TagCode;
 import kr.ac.suwon.dispenser.profile.dto.ProfileCreateRequest;
+import kr.ac.suwon.dispenser.profile.dto.ProfileInfo;
 import kr.ac.suwon.dispenser.profile.dto.ProfileItem;
 import kr.ac.suwon.dispenser.profile.dto.ProfileListResponse;
 import kr.ac.suwon.dispenser.profile.service.ProfileService;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,5 +60,16 @@ public class ProfileController {
         profileService.updateProfile(account.getId(), profileId, request.name(), request.height(), request.weight(),
                 request.gender(), request.tags(), request.conditions());
         return ResponseEntity.ok(new ProfileItem(profileId, request.name()));
+    }
+
+    @GetMapping("/{profileId}")
+    public ResponseEntity<ProfileInfo> getProfile(
+            @AuthenticationPrincipal AccountPrincipal account,
+            @PathVariable Long profileId) {
+        Profile profile = profileService.findByIdAndAccountId(profileId, account.getId());
+        Set<TagCode> tags = profile.getTags().stream().map(pt -> pt.getTag().getCode()).collect(Collectors.toSet());
+        Set<ConditionCode> conditions = profile.getConditions().stream().map(pc -> pc.getCondition().getCode()).collect(Collectors.toSet());
+        return ResponseEntity.ok(new ProfileInfo(profileId, profile.getName(), profile.getHeight(), profile.getWeight(),
+                profile.getGender(), tags, conditions));
     }
 }
