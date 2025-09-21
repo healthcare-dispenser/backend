@@ -3,6 +3,7 @@ package kr.ac.suwon.dispenser.profile.service;
 
 import kr.ac.suwon.dispenser.account.domain.Account;
 import kr.ac.suwon.dispenser.account.service.AccountService;
+import kr.ac.suwon.dispenser.profile.domain.Gender;
 import kr.ac.suwon.dispenser.profile.domain.Profile;
 import kr.ac.suwon.dispenser.profile.domain.condition.Condition;
 import kr.ac.suwon.dispenser.profile.domain.condition.ConditionCode;
@@ -27,10 +28,10 @@ public class ProfileService {
     private final ConditionService conditionService;
     private final TagService tagService;
 
-    public Long createProfile(Long accountId, String name, Double height, Double weight,
+    public Long createProfile(Long accountId, String name, Double height, Double weight, Gender gender,
                               Set<TagCode> tags, Set<ConditionCode> conditions) {
         Account account = accountService.findById(accountId);
-        Profile profile = Profile.create(account, name, height, weight);
+        Profile profile = Profile.create(account, name, height, weight, gender);
 
         Set<Tag> tagSet = tags.stream().map(tagService::findByCode).collect(Collectors.toSet());
         Set<Condition> conditionSet = conditions.stream().map(conditionService::findByCode).collect(Collectors.toSet());

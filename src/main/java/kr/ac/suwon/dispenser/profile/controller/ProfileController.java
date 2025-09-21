@@ -33,7 +33,7 @@ public class ProfileController {
             @AuthenticationPrincipal AccountPrincipal account,
             @RequestBody ProfileCreateRequest request) {
         Long profileId = profileService.createProfile(account.getId(), request.name(), request.height(), request.weight(),
-                request.tags(), request.conditions());
+                request.gender(), request.tags(), request.conditions());
 
         URI location = URI.create("api/profiles/" + profileId);
         return ResponseEntity.created(location).body(new ProfileItem(profileId, request.name()));

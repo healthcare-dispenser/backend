@@ -36,20 +36,24 @@ public class Profile {
     private String name;
     private Double height;
     private Double weight;
+    private Gender gender;
+
     @Builder(access = AccessLevel.PRIVATE)
-    public Profile(Account account, String name, Double height, Double weight) {
+    public Profile(Account account, String name, Double height, Double weight, Gender gender) {
         this.account = account;
         this.name = name;
         this.height = height;
         this.weight = weight;
+        this.gender = gender;
     }
 
-    public static Profile create(Account account, String name, Double height, Double weight) {
+    public static Profile create(Account account, String name, Double height, Double weight, Gender gender) {
         return Profile.builder()
                 .account(account)
                 .name(name)
                 .height(height)
-                .weight(weight).build();
+                .weight(weight)
+                .gender(gender).build();
     }
 
     public void addTag(Tag tag) {
