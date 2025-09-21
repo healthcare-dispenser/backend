@@ -15,13 +15,17 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Long createAccount(String name, String email, String password) {
+    public Long createAccount(String email, String password, String passwordConfirm) {
+
+        if (!password.equals(passwordConfirm)) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
         if (accountRepository.existsByEmail(email)) {
             throw new RuntimeException("이미 사용중인 이메일 입니다.");
         }
 
-        Account account = Account.create(name, email, passwordEncoder.encode(password));
+        Account account = Account.create(email, passwordEncoder.encode(password));
         return accountRepository.save(account).getId();
     }
 

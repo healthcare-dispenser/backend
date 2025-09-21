@@ -17,21 +17,18 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    private String name;
     private String email;
     private String password;
 
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Account(String name, String email, String password) {
-        this.name = name;
+    public Account( String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public static Account create(String name, String email, String password) {
+    public static Account create(String email, String password) {
         return Account.builder()
-                .name(name)
                 .email(email)
                 .password(password).build();
     }

@@ -25,18 +25,17 @@ public class AccountController {
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signup(@RequestBody SignupRequest request) {
-        Long accountId = accountService.createAccount(request.name(), request.email(), request.password());
+        Long accountId = accountService.createAccount(request.email(), request.password(), request.passwordConfirm());
         String token = jwtTokenProvider.createAccessToken(accountId);
 
         URI location = URI.create("/api/accounts/" + accountId);
-        return ResponseEntity.created(location).body(new AuthResponse(accountId, request.name(), request.email(), token));
+        return ResponseEntity.created(location).body(new AuthResponse(accountId,request.email(), token));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         Account account = accountService.login(request.email(), request.password());
         String token = jwtTokenProvider.createAccessToken(account.getId());
-        return ResponseEntity.ok(new AuthResponse(account.getId(), account.getName(), account.getEmail(), token));
+        return ResponseEntity.ok(new AuthResponse(account.getId(), account.getEmail(), token));
     }
-
 }
