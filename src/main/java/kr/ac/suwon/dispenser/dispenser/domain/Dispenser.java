@@ -29,15 +29,21 @@ public class Dispenser {
     @Builder(access = AccessLevel.PRIVATE)
     public Dispenser(String uuid) {
         this.uuid = uuid;
-        this.status = DispenserStatus.REGISTERED;
     }
 
     public static Dispenser create(String uuid) {
-        return Dispenser.builder()
+        Dispenser dispenser = Dispenser.builder()
                 .uuid(uuid).build();
+
+        dispenser.status = DispenserStatus.REGISTERED;
+        return dispenser;
     }
 
     public void assignAccount(Account account) {
         this.account = account;
+    }
+
+    public void updateStatus(DispenserStatus status) {
+        this.status = status;
     }
 }
