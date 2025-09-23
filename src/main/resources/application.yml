@@ -34,3 +34,11 @@ jwt:
   token :
     expiration:
       access : 1800000    # 30?
+
+
+mqtt:
+  broker: tcp://localhost:1883
+  client-id: spring-client
+  clean-session: false
+  keep-alive: 20
+  timeout: 10

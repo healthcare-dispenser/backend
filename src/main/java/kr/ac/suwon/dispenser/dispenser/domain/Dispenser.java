@@ -3,6 +3,7 @@ package kr.ac.suwon.dispenser.dispenser.domain;
 import jakarta.persistence.*;
 import kr.ac.suwon.dispenser.account.domain.Account;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,18 @@ public class Dispenser {
 
     private DispenserStatus status;
 
+    @Builder(access = AccessLevel.PRIVATE)
+    public Dispenser(String uuid) {
+        this.uuid = uuid;
+        this.status = DispenserStatus.REGISTERED;
+    }
 
+    public static Dispenser create(String uuid) {
+        return Dispenser.builder()
+                .uuid(uuid).build();
+    }
+
+    public void assignAccount(Account account) {
+        this.account = account;
+    }
 }
