@@ -33,7 +33,8 @@ public class IntakeService {
         Double melatonin = 1.0;
         Double magnesium = 1.0;
         Double electrolyte = 1.0;
-        String profileSnapshot = "default";
+        String profileSnapshot = null;
+
 
 
         String commandUuid = profile.getId() + "-" + UUID.randomUUID();
