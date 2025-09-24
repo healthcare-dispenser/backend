@@ -1,9 +1,12 @@
 package kr.ac.suwon.dispenser.common.mqtt;
 
 import kr.ac.suwon.dispenser.common.JsonMapper;
+import kr.ac.suwon.dispenser.dispenser.dto.CommandStatus;
+import kr.ac.suwon.dispenser.dispenser.dto.DispenserCommandResponse;
 import kr.ac.suwon.dispenser.dispenser.dto.DispenserRegisterRequest;
 import kr.ac.suwon.dispenser.dispenser.dto.DispenserRegisterResponse;
 import kr.ac.suwon.dispenser.dispenser.service.DispenserService;
+import kr.ac.suwon.dispenser.intake.service.IntakeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
@@ -24,6 +27,7 @@ public class MqttListener implements MqttCallbackExtended {
     private final MqttService mqttService;
     private final JsonMapper mapper;
     private final DispenserService dispenserService;
+    private final IntakeService intakeService;
 
     @Value("${mqtt.clean-session}")
     private boolean cleanSession;
@@ -70,9 +74,21 @@ public class MqttListener implements MqttCallbackExtended {
         mqttService.publishRegisterResponse(uuid, DispenserRegisterResponse.ok(uuid));
     }
 
+    void getCommandResponse(String topic, MqttMessage msg) {
+        String json = new String(msg.getPayload());
+        DispenserCommandResponse response = mapper.fromJson(json, DispenserCommandResponse.class);
+
+        if (response.status() == CommandStatus.SUCCESS) {
+            intakeService.recordSuccess(response.commandUuid());
+        } else if (response.status() == CommandStatus.FAIL) {
+            intakeService.recordFail(response.commandUuid());
+        }
+    }
+
 
     private void subscribeAll() throws MqttException {
         mqttClient.subscribe(DISPENSER_REGISTER_ALL, 1, this::register);
+        mqttClient.subscribe(DISPENSER_COMMAND_RESPONSE, 1, this::getCommandResponse);
     }
 
     @Override

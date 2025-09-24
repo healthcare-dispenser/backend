@@ -69,4 +69,8 @@ public class ProfileService {
         conditionSet.forEach(profile::addCondition);
     }
 
+    public Profile findById(Long profileId) {
+        return profileRepository.findById(profileId).orElseThrow(() -> new RuntimeException("존재하지 않는 프로필 입니다."));
+    }
+
 }
