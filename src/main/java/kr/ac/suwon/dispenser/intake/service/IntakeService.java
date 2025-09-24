@@ -25,7 +25,7 @@ public class IntakeService {
 
     // RuleEngine 기반으로 교체 예정 지금은 값 고정해서 보내기
     // 프로필 스냅샷도 내부적으로 추가해야됨
-    public Long recordIntake(Long profileId, String dispenserUuid) {
+    public Intake recordIntake(Long profileId, String dispenserUuid) {
 
         Profile profile = profileService.findById(profileId);
         Dispenser dispenser = dispenserService.findByUuid(dispenserUuid);
@@ -41,7 +41,7 @@ public class IntakeService {
         mqttService.publishCommand(dispenserUuid, dispenserUuid, vitamin, melatonin, magnesium, electrolyte);
 
         intake.markProcessing();
-        return intakeRepository.save(intake).getId();
+        return intakeRepository.save(intake);
     }
 
     public void recordSuccess(String commandUuid) {
