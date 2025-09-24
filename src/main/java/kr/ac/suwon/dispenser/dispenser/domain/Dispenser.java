@@ -24,6 +24,7 @@ public class Dispenser {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @Enumerated(EnumType.STRING)
     private DispenserStatus status;
 
     @Builder(access = AccessLevel.PRIVATE)
@@ -40,6 +41,7 @@ public class Dispenser {
     }
 
     public void assignAccount(Account account) {
+        this.status = DispenserStatus.ACTIVE;
         this.account = account;
     }
 
