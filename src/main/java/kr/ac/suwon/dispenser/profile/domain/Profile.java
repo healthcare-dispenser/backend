@@ -36,6 +36,8 @@ public class Profile {
     private String name;
     private Double height;
     private Double weight;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Builder(access = AccessLevel.PRIVATE)
