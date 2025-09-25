@@ -8,11 +8,14 @@ import kr.ac.suwon.dispenser.intake.repository.IntakeRepository;
 import kr.ac.suwon.dispenser.profile.domain.Profile;
 import kr.ac.suwon.dispenser.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -38,6 +41,7 @@ public class IntakeService {
 
 
         String commandUuid = profile.getId() + "-" + UUID.randomUUID();
+        log.info("[INTAKE] 명령 UUID = {}", commandUuid);
         Intake intake = Intake.create(profile, dispenser, commandUuid, vitamin, melatonin, magnesium, electrolyte, profileSnapshot);
         mqttService.publishCommand(dispenserUuid, dispenserUuid, vitamin, melatonin, magnesium, electrolyte);
 
@@ -61,6 +65,10 @@ public class IntakeService {
 
     public Intake findByCommandUuid(String commandUuid) {
         return intakeRepository.findByCommandUuid(commandUuid).orElseThrow(() -> new RuntimeException("존재하지 않는 섭취기록 입니다."));
+    }
+
+    public List<Intake> findAllByProfileId(Long profileId) {
+        return intakeRepository.findAllByProfile_Id(profileId);
     }
 
 }
