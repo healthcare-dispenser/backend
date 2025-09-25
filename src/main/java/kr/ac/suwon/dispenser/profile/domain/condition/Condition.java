@@ -2,6 +2,7 @@ package kr.ac.suwon.dispenser.profile.domain.condition;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,15 @@ public class Condition {
     private ConditionCode code;
     private String label;
 
+    @Builder(access = AccessLevel.PRIVATE)
+    public Condition(ConditionCode code, String label) {
+        this.code = code;
+        this.label = label;
+    }
 
-
+    public static Condition create(ConditionCode code, String label) {
+        return Condition.builder()
+                .code(code)
+                .label(label).build();
+    }
 }
