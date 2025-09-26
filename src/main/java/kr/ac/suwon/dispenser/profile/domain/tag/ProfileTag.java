@@ -1,8 +1,7 @@
-package kr.ac.suwon.dispenser.profile.domain;
+package kr.ac.suwon.dispenser.profile.domain.tag;
 
 import jakarta.persistence.*;
-import kr.ac.suwon.dispenser.profile.domain.tag.ProfileTagId;
-import kr.ac.suwon.dispenser.profile.domain.tag.Tag;
+import kr.ac.suwon.dispenser.profile.domain.Profile;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ProfileTag {
 
     @EmbeddedId
-    private ProfileTagId id;
+    private ProfileTagId id = new ProfileTagId();
 
     @MapsId("profileId")
     @ManyToOne(fetch = FetchType.LAZY)

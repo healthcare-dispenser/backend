@@ -3,6 +3,8 @@ package kr.ac.suwon.dispenser.profile.domain;
 import jakarta.persistence.*;
 import kr.ac.suwon.dispenser.account.domain.Account;
 import kr.ac.suwon.dispenser.profile.domain.condition.Condition;
+import kr.ac.suwon.dispenser.profile.domain.condition.ProfileCondition;
+import kr.ac.suwon.dispenser.profile.domain.tag.ProfileTag;
 import kr.ac.suwon.dispenser.profile.domain.tag.Tag;
 import lombok.AccessLevel;
 import lombok.Builder;

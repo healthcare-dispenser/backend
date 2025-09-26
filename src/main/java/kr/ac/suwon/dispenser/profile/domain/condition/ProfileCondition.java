@@ -1,8 +1,7 @@
-package kr.ac.suwon.dispenser.profile.domain;
+package kr.ac.suwon.dispenser.profile.domain.condition;
 
 import jakarta.persistence.*;
-import kr.ac.suwon.dispenser.profile.domain.condition.Condition;
-import kr.ac.suwon.dispenser.profile.domain.condition.ProfileConditionId;
+import kr.ac.suwon.dispenser.profile.domain.Profile;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ProfileCondition {
 
     @EmbeddedId
-    private ProfileConditionId id;
+    private ProfileConditionId id = new ProfileConditionId();
 
     @MapsId("profileId")
     @ManyToOne(fetch = FetchType.LAZY)
