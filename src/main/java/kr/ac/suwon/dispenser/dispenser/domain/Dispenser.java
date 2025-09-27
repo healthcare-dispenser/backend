@@ -15,7 +15,7 @@ public class Dispenser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "profile_id")
+    @Column(name = "dispenser_id")
     private Long id;
 
     private String uuid;

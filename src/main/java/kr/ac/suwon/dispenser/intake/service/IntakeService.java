@@ -43,7 +43,7 @@ public class IntakeService {
         String commandUuid = profile.getId() + "-" + UUID.randomUUID();
         log.info("[INTAKE] 명령 UUID = {}", commandUuid);
         Intake intake = Intake.create(profile, dispenser, commandUuid, vitamin, melatonin, magnesium, electrolyte, profileSnapshot);
-        mqttService.publishCommand(dispenserUuid, dispenserUuid, vitamin, melatonin, magnesium, electrolyte);
+        mqttService.publishCommand(dispenserUuid, commandUuid, vitamin, melatonin, magnesium, electrolyte);
 
         intake.markProcessing();
         return intakeRepository.save(intake);
