@@ -5,9 +5,11 @@ import kr.ac.suwon.dispenser.account.service.AccountService;
 import kr.ac.suwon.dispenser.dispenser.domain.Dispenser;
 import kr.ac.suwon.dispenser.dispenser.repository.DispenserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -36,7 +38,11 @@ public class DispenserService {
     }
 
     public Dispenser findByUuid(String uuid) {
-        return dispenserRepository.findByUuid(uuid).orElseThrow(() -> new RuntimeException("존재하지 않는 디스펜서 입니다."));
+        return dispenserRepository.findByUuid(uuid)
+                .orElseThrow(() -> {
+                    log.error("[DispenserService] 존재하지 않는 디스펜서 요청 - uuid={}", uuid);
+                    return new RuntimeException("존재하지 않는 디스펜서 입니다.");
+                });
     }
 
     public boolean isExistByUuid(String uuid) {
