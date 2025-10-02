@@ -36,6 +36,7 @@ public class Profile {
     private Set<ProfileCondition> conditions = new HashSet<>();
 
     private String name;
+    private Integer age;
     private Double height;
     private Double weight;
 
@@ -43,18 +44,20 @@ public class Profile {
     private Gender gender;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Profile(Account account, String name, Double height, Double weight, Gender gender) {
+    public Profile(Account account, String name, Integer age, Double height, Double weight, Gender gender) {
         this.account = account;
         this.name = name;
+        this.age = age;
         this.height = height;
         this.weight = weight;
         this.gender = gender;
     }
 
-    public static Profile create(Account account, String name, Double height, Double weight, Gender gender) {
+    public static Profile create(Account account, String name, Integer age, Double height, Double weight, Gender gender) {
         return Profile.builder()
                 .account(account)
                 .name(name)
+                .age(age)
                 .height(height)
                 .weight(weight)
                 .gender(gender).build();

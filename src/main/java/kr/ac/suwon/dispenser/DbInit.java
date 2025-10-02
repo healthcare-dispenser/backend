@@ -41,10 +41,10 @@ public class DbInit {
         accountRepository.save(a1);
         accountRepository.save(a2);
 
-        Profile p1 = Profile.create(a1, "세현", 180.0, 70.0, Gender.MALE);
-        Profile p2 = Profile.create(a1, "다인", 160.0, 40.0, Gender.FEMALE);
-        Profile p3 = Profile.create(a1, "다혜", 160.0, 40.0, Gender.FEMALE);
-        Profile p4 = Profile.create(a2, "test", 160.0, 40.0, Gender.MALE);
+        Profile p1 = Profile.create(a1, "세현", 24, 180.0, 70.0, Gender.MALE);
+        Profile p2 = Profile.create(a1, "다인", 21, 160.0, 40.0, Gender.FEMALE);
+        Profile p3 = Profile.create(a1, "다혜", 22,  160.0, 40.0, Gender.FEMALE);
+        Profile p4 = Profile.create(a2, "test", 70, 160.0, 40.0, Gender.MALE);
 
         profileRepository.save(p1);
         profileRepository.save(p2);

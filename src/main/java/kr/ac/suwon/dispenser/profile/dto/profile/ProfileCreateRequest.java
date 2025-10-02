@@ -8,6 +8,7 @@ import java.util.Set;
 
 public record ProfileCreateRequest(
         String name,
+        Integer age,
         Double height,
         Double weight,
         Gender gender,

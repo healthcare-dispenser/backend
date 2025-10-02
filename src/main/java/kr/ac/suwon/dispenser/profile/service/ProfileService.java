@@ -28,11 +28,10 @@ public class ProfileService {
     private final ConditionService conditionService;
     private final TagService tagService;
 
-    public Long createProfile(Long accountId, String name, Double height, Double weight, Gender gender,
+    public Long createProfile(Long accountId, String name, Integer age, Double height, Double weight, Gender gender,
                               Set<TagCode> tags, Set<ConditionCode> conditions) {
         Account account = accountService.findById(accountId);
-        Profile profile = Profile.create(account, name, height, weight, gender);
-
+        Profile profile = Profile.create(account, name, age, height, weight, gender);
         addTagsAndConditions(tags, conditions, profile);
 
         return profileRepository.save(profile).getId();
