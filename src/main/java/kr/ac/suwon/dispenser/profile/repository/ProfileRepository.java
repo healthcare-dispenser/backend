@@ -14,7 +14,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     @EntityGraph(attributePaths = {
             "tags", "tags.tag",
-            "conditions", "conditions,condition"
+            "conditions", "conditions.condition"
     })
     Optional<Profile> findByIdAndAccount_Id(Long profileId, Long accountId);
 }
