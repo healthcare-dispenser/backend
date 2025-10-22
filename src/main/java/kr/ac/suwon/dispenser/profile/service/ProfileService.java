@@ -53,6 +53,9 @@ public class ProfileService {
         Profile profile = findByIdAndAccountId(accountId, profileId);
         profile.updateProfile(name,height,weight,gender);
 
+        profile.getConditions().clear();
+        profile.getTags().clear();
+
         addTagsAndConditions(tags, conditions, profile);
     }
 
