@@ -11,6 +11,7 @@ import kr.ac.suwon.dispenser.profile.domain.tag.Tag;
 import kr.ac.suwon.dispenser.profile.domain.tag.TagCode;
 import kr.ac.suwon.dispenser.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -50,7 +52,9 @@ public class ProfileService {
 
     public void updateProfile(Long accountId, Long profileId, String name, Double height, Double weight, Gender gender,
                               Set<TagCode> tags, Set<ConditionCode> conditions) {
-        Profile profile = findByIdAndAccountId(accountId, profileId);
+
+        log.info("[ProfileService] 프로필 업데이트 요청 accountId=[{}], profileId=[{}]", accountId, profileId);
+        Profile profile = findByIdAndAccountId(profileId, accountId);
         profile.updateProfile(name,height,weight,gender);
 
         profile.getConditions().clear();
