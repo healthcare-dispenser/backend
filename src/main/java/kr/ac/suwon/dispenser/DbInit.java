@@ -81,5 +81,8 @@ public class DbInit {
         tagRepository.save(t5);
         tagRepository.save(t6);
         tagRepository.save(t7);
+
+        p1.addTag(t1);
+        p2.addTag(t2);
     }
 }
