@@ -4,6 +4,10 @@ import kr.ac.suwon.dispenser.account.domain.Account;
 import kr.ac.suwon.dispenser.account.repository.AccountRepository;
 import kr.ac.suwon.dispenser.dispenser.domain.Dispenser;
 import kr.ac.suwon.dispenser.dispenser.repository.DispenserRepository;
+import kr.ac.suwon.dispenser.intake.domain.Feedback;
+import kr.ac.suwon.dispenser.intake.domain.Intake;
+import kr.ac.suwon.dispenser.intake.repository.FeedbackRepository;
+import kr.ac.suwon.dispenser.intake.repository.IntakeRepository;
 import kr.ac.suwon.dispenser.profile.domain.Gender;
 import kr.ac.suwon.dispenser.profile.domain.Profile;
 import kr.ac.suwon.dispenser.profile.domain.condition.Condition;
@@ -30,6 +34,8 @@ public class DbInit {
     private final ConditionRepository conditionRepository;
     private final TagRepository tagRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IntakeRepository intakeRepository;
+    private final FeedbackRepository feedbackRepository;
 
 
     @EventListener(ApplicationReadyEvent.class)
@@ -84,5 +90,22 @@ public class DbInit {
 
         p1.addTag(t1);
         p2.addTag(t2);
+
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test1"}
+                """));
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test2"}
+                """));
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test3"}
+                """));
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test4"}
+                """));
+
+        feedbackRepository.save(Feedback.create(p1, 2, 3));
+        feedbackRepository.save(Feedback.create(p1, 2, 5));
+        feedbackRepository.save(Feedback.create(p1, 5, 1));
     }
 }
