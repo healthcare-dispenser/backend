@@ -17,12 +17,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/intakes")
+@RequestMapping
 public class IntakeController {
 
     private final IntakeService intakeService;
 
-    @PostMapping
+    @PostMapping("/api/intakes")
     public ResponseEntity<IntakeResponse> commandDispense(@AuthenticationPrincipal AccountPrincipal account,
                                                           @RequestBody IntakeRequest request) {
         Intake intake = intakeService.recordIntake(request.profileId(), request.dispenserUuid());
@@ -30,17 +30,17 @@ public class IntakeController {
         return ResponseEntity.accepted().location(location).body(new IntakeResponse(intake.getId(), intake.getStatus()));
     }
 
-    @GetMapping("/{intakeId}")
+    @GetMapping("/api/intakes/{intakeId}")
     public ResponseEntity<IntakeResponse> getCommandStatus(@AuthenticationPrincipal AccountPrincipal account,
                                                            @PathVariable Long intakeId) {
         Intake intake = intakeService.findById(intakeId);
         return ResponseEntity.ok().body(new IntakeResponse(intakeId, intake.getStatus()));
     }
 
-    @GetMapping
+    @GetMapping("/api/profiles/{profileId}/intakes")
     public ResponseEntity<IntakeListResponse> getIntakeList(@AuthenticationPrincipal AccountPrincipal account,
-                                                            @RequestBody IntakeRequest request) {
-        List<Intake> intakeList = intakeService.findAllByProfileId(request.profileId());
+                                                            @PathVariable Long profileId) {
+        List<Intake> intakeList = intakeService.findAllByProfileId(profileId);
         List<IntakeItem> list = intakeList.stream().map(i -> new IntakeItem(i.getId(), i.getVitamin(), i.getMelatonin(),
                 i.getMagnesium(), i.getElectrolyte(), i.getStatus(), i.getProfileSnapshot(),
                 i.getRequestedAt(), i.getCompletedAt())).toList();
