@@ -57,8 +57,7 @@ public class ProfileService {
         Profile profile = findByIdAndAccountId(profileId, accountId);
         profile.updateProfile(name,height,weight,gender);
 
-        profile.getConditions().clear();
-        profile.getTags().clear();
+
 
         addTagsAndConditions(tags, conditions, profile);
     }
@@ -68,11 +67,46 @@ public class ProfileService {
     }
 
     private void addTagsAndConditions(Set<TagCode> tags, Set<ConditionCode> conditions, Profile profile) {
-        Set<Tag> tagSet = tags.stream().map(tagService::findByCode).collect(Collectors.toSet());
-        Set<Condition> conditionSet = conditions.stream().map(conditionService::findByCode).collect(Collectors.toSet());
 
-        tagSet.forEach(profile::addTag);
-        conditionSet.forEach(profile::addCondition);
+        // null-safe
+        Set<TagCode> targetTags = (tags == null) ? Set.of() : tags;
+        Set<ConditionCode> targetConds = (conditions == null) ? Set.of() : conditions;
+
+        // TAGS: 제거 - 추가
+        // 현재 보유 코드
+        Set<TagCode> currentTagCodes = profile.getTags().stream()
+                .map(pt -> pt.getTag().getCode())
+                .collect(Collectors.toSet());
+
+        // 제거: 요청에 없는 링크 제거 (orphanRemoval=true면 DB에서 DELETE)
+        profile.getTags().removeIf(pt -> !targetTags.contains(pt.getTag().getCode()));
+
+        // 추가: target - current 만 추가
+        for (TagCode code : targetTags) {
+            if (!currentTagCodes.contains(code)) {
+                Tag tag = tagService.findByCode(code);
+                profile.addTag(tag);
+            }
+        }
+
+        // CONDITIONS: 제거 - 추가
+        Set<ConditionCode> currentCondCodes = profile.getConditions().stream()
+                .map(pc -> pc.getCondition().getCode())
+                .collect(Collectors.toSet());
+
+        profile.getConditions().removeIf(pc -> !targetConds.contains(pc.getCondition().getCode()));
+
+        for (ConditionCode code : targetConds) {
+            if (!currentCondCodes.contains(code)) {
+                Condition cond = conditionService.findByCode(code);
+                profile.addCondition(cond);
+            }
+        }
+//        Set<Tag> tagSet = tags.stream().map(tagService::findByCode).collect(Collectors.toSet());
+//        Set<Condition> conditionSet = conditions.stream().map(conditionService::findByCode).collect(Collectors.toSet());
+//
+//        tagSet.forEach(profile::addTag);
+//        conditionSet.forEach(profile::addCondition);
     }
 
     public Profile findById(Long profileId) {

@@ -1,7 +1,10 @@
 package kr.ac.suwon.dispenser.profile.domain;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import kr.ac.suwon.dispenser.account.domain.Account;
+import kr.ac.suwon.dispenser.intake.domain.Feedback;
 import kr.ac.suwon.dispenser.profile.domain.condition.Condition;
 import kr.ac.suwon.dispenser.profile.domain.condition.ProfileCondition;
 import kr.ac.suwon.dispenser.profile.domain.tag.ProfileTag;
@@ -34,6 +37,9 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProfileCondition> conditions = new HashSet<>();
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     private String name;
     private Integer age;
