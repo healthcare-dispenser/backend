@@ -104,6 +104,16 @@ public class DbInit {
                 {"test":"test4"}
                 """));
 
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test5"}
+                """));
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test6"}
+                """));
+        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                {"test":"test7"}
+                """));
+
         feedbackRepository.save(Feedback.create(p1, 2, 3));
         feedbackRepository.save(Feedback.create(p1, 2, 5));
         feedbackRepository.save(Feedback.create(p1, 5, 1));
