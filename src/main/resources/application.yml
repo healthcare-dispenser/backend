@@ -35,7 +35,7 @@ jwt:
   key: ${JWT_SECRET_KEY}
   token :
     expiration:
-      access : 1800000    # 30?
+      access : 1800000000    # 30?
 
 
 mqtt:
