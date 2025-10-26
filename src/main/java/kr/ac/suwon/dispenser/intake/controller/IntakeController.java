@@ -1,11 +1,13 @@
 package kr.ac.suwon.dispenser.intake.controller;
 
+import java.util.Map;
 import kr.ac.suwon.dispenser.common.AccountPrincipal;
 import kr.ac.suwon.dispenser.intake.domain.Intake;
 import kr.ac.suwon.dispenser.intake.dto.IntakeItem;
 import kr.ac.suwon.dispenser.intake.dto.IntakeListResponse;
 import kr.ac.suwon.dispenser.intake.dto.IntakeRequest;
 import kr.ac.suwon.dispenser.intake.dto.IntakeResponse;
+import kr.ac.suwon.dispenser.intake.dto.RecommendIntakeResponse;
 import kr.ac.suwon.dispenser.intake.service.IntakeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,8 @@ public class IntakeController {
                                                           @RequestBody IntakeRequest request) {
         Intake intake = intakeService.recordIntake(request.profileId(), request.dispenserUuid());
         URI location = URI.create("/api/intakes/" + intake.getId());
-        return ResponseEntity.accepted().location(location).body(new IntakeResponse(intake.getId(), intake.getStatus()));
+        return ResponseEntity.accepted().location(location)
+                .body(new IntakeResponse(intake.getId(), intake.getStatus()));
     }
 
     @GetMapping("/api/intakes/{intakeId}")
@@ -46,5 +49,14 @@ public class IntakeController {
                 i.getRequestedAt(), i.getCompletedAt())).toList();
 
         return ResponseEntity.ok().body(new IntakeListResponse(list, list.size()));
+    }
+
+    @GetMapping("/api/profiles/{profileId}/recommend")
+    public ResponseEntity<RecommendIntakeResponse> getRecommend(
+            @AuthenticationPrincipal AccountPrincipal account,
+            @PathVariable Long profileId) {
+        Map<String, Double> plan = intakeService.getPlan(profileId);
+        return ResponseEntity.ok(new RecommendIntakeResponse(plan.get("ZINC"),
+                plan.get("MELATONIN"), plan.get("MAGNESIUM"), plan.get("ELECTROLYTE")));
     }
 }

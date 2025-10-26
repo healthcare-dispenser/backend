@@ -31,6 +31,19 @@ public class IntakeService {
     private final RuleEngine ruleEngine;
     private final MqttService mqttService;
 
+    public Map<String, Double> getPlan(Long profileId) {
+        Profile profile = profileService.findById(profileId);
+        RuleContext ruleContext = new RuleContext(
+                profile.getAge(),
+                profile.getHeight(),
+                profile.getWeight(),
+                profile.getGender(),
+                profile.getTags().stream().map(pt -> pt.getTag().getCode()).collect(Collectors.toSet()),
+                profile.getConditions().stream().map(pc -> pc.getCondition().getCode()).collect(Collectors.toSet()));
+
+        return ruleEngine.run(ruleContext);
+    }
+
     // 프로필 스냅샷도 내부적으로 추가해야됨
     public Intake recordIntake(Long profileId, String dispenserUuid) {
 
