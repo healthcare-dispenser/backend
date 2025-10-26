@@ -45,6 +45,11 @@ public class Dispenser {
         this.account = account;
     }
 
+    public void unAssignAccount() {
+        this.account = null;
+        this.status = DispenserStatus.REGISTERED;
+    }
+
     public void updateStatus(DispenserStatus status) {
         this.status = status;
     }

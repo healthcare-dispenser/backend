@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface DispenserRepository extends JpaRepository<Dispenser, Long> {
     Optional<Dispenser> findByUuid(String uuid);
 
+    Optional<Dispenser> findByAccount_Id(Long accountId);
     boolean existsByUuid(String uuid);
 }

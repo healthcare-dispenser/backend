@@ -58,9 +58,11 @@ public class DbInit {
         profileRepository.save(p4);
 
         Dispenser dispenser = Dispenser.create("TEST-UUID");
+        Dispenser dispenser2 = Dispenser.create("TEST-UUID2");
         dispenser.assignAccount(a1);
 
         dispenserRepository.save(dispenser);
+        dispenserRepository.save(dispenser2);
 
         Condition c1 = Condition.create(ConditionCode.PREGNANT, "임산부");
         Condition c2 = Condition.create(ConditionCode.CARDIOVASCULAR, "심혈관질환");
