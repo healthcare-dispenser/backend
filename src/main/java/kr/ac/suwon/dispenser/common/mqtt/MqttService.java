@@ -35,8 +35,8 @@ public class MqttService {
         }
     }
 
-    public void publishCommand(String dispenserUuid, String commandUuid, Double vitamin, Double melatonin, Double magnesium, Double electrolyte) {
-        publishJson(getCommandRequestTopic(dispenserUuid), new DispenserCommandRequest(commandUuid, vitamin, melatonin, magnesium, electrolyte));
+    public void publishCommand(String dispenserUuid, String commandUuid, Double zinc, Double melatonin, Double magnesium, Double electrolyte) {
+        publishJson(getCommandRequestTopic(dispenserUuid), new DispenserCommandRequest(commandUuid, zinc, melatonin, magnesium, electrolyte));
     }
 
     public void publishRegisterResponse(String uuid, DispenserRegisterResponse response) {

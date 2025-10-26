@@ -28,7 +28,7 @@ public class Intake {
     private Dispenser dispenser;
 
     private String commandUuid;
-    private Double vitamin;
+    private Double zinc;
     private Double melatonin;
     private Double magnesium;
     private Double electrolyte;
@@ -45,12 +45,12 @@ public class Intake {
 
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Intake(Profile profile, Dispenser dispenser,String commandUuid, Double vitamin, Double melatonin, Double magnesium, Double electrolyte,
+    public Intake(Profile profile, Dispenser dispenser, String commandUuid, Double zinc, Double melatonin, Double magnesium, Double electrolyte,
                   IntakeStatus status, String profileSnapshot) {
         this.profile = profile;
         this.dispenser = dispenser;
         this.commandUuid = commandUuid;
-        this.vitamin = vitamin;
+        this.zinc = zinc;
         this.melatonin = melatonin;
         this.magnesium = magnesium;
         this.electrolyte = electrolyte;
@@ -58,13 +58,13 @@ public class Intake {
         this.profileSnapshot = profileSnapshot;
     }
 
-    public static Intake create(Profile profile, Dispenser dispenser,String commandUuid, Double vitamin,
+    public static Intake create(Profile profile, Dispenser dispenser,String commandUuid, Double zinc,
                                 Double melatonin, Double magnesium, Double electrolyte, String profileSnapshot) {
         Intake intake = Intake.builder()
                 .profile(profile)
                 .dispenser(dispenser)
                 .commandUuid(commandUuid)
-                .vitamin(vitamin)
+                .zinc(zinc)
                 .melatonin(melatonin)
                 .magnesium(magnesium)
                 .electrolyte(electrolyte)

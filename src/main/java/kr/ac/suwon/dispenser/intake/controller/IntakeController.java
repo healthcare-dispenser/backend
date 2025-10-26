@@ -41,7 +41,7 @@ public class IntakeController {
     public ResponseEntity<IntakeListResponse> getIntakeList(@AuthenticationPrincipal AccountPrincipal account,
                                                             @PathVariable Long profileId) {
         List<Intake> intakeList = intakeService.findAllByProfileId(profileId);
-        List<IntakeItem> list = intakeList.stream().map(i -> new IntakeItem(i.getId(), i.getVitamin(), i.getMelatonin(),
+        List<IntakeItem> list = intakeList.stream().map(i -> new IntakeItem(i.getId(), i.getZinc(), i.getMelatonin(),
                 i.getMagnesium(), i.getElectrolyte(), i.getStatus(), i.getProfileSnapshot(),
                 i.getRequestedAt(), i.getCompletedAt())).toList();
 

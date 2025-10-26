@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public record IntakeItem(
         Long intakeId,
-        Double vitamin,
+        Double zinc,
         Double melatonin,
         Double magnesium,
         Double electrolyte,
