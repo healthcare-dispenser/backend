@@ -22,5 +22,13 @@ public class DispenserController {
         dispenserService.assignAccount(account.getId(), request.uuid());
         return ResponseEntity.ok().body(new DispenserAssignResponse(account.getId(), request.uuid()));
     }
+
+    @PostMapping("/{dispenserUuid}/wash/{slot}")
+    public ResponseEntity<Void> requestWash(@AuthenticationPrincipal AccountPrincipal account,
+                                            @PathVariable String dispenserUuid,
+                                            @PathVariable int slot) {
+        dispenserService.requestWash(dispenserUuid, slot);
+        return ResponseEntity.ok().build();
+    }
     
 }

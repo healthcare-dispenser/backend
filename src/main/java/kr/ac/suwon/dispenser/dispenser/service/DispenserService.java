@@ -3,6 +3,7 @@ package kr.ac.suwon.dispenser.dispenser.service;
 import java.util.Optional;
 import kr.ac.suwon.dispenser.account.domain.Account;
 import kr.ac.suwon.dispenser.account.service.AccountService;
+import kr.ac.suwon.dispenser.common.mqtt.MqttService;
 import kr.ac.suwon.dispenser.dispenser.domain.Dispenser;
 import kr.ac.suwon.dispenser.dispenser.repository.DispenserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DispenserService {
 
     private final DispenserRepository dispenserRepository;
+    private final MqttService mqttService;
     private final AccountService accountService;
 
     public String createDispenser(String uuid) {
@@ -52,6 +54,10 @@ public class DispenserService {
 
     public Optional<Dispenser> findByAccountId(Long accountId) {
         return dispenserRepository.findByAccount_Id(accountId);
+    }
+
+    public void requestWash(String dispenserUuid, int slot) {
+        mqttService.publishWash(dispenserUuid, slot);
     }
 
     public boolean isExistByUuid(String uuid) {

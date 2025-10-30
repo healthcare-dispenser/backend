@@ -11,4 +11,8 @@ public abstract class MqttConstants {
     public static String getCommandRequestTopic(String uuid) {
         return "dispenser/" + uuid + "/command";
     }
+
+    public static String getWashRequestTopic(String uuid) {
+        return "dispenser/" + uuid + "/wash";
+    }
 }
