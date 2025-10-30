@@ -42,15 +42,17 @@ public class RuleEngine {
 
     // ----------------- Rules -----------------
 
-    /** 🌙 멜라토닌: 밤(21:00~02:59)+SLEEP, 금기(PREGNANT/LIVER/CARDIO) 제외, 18~64세만.
-     *  ☕ CAFFEINE 있으면 억제(0.5x) */
+    /** 멜라토닌: 밤(21:00~02:59)+SLEEP, 금기(PREGNANT/LIVER/CARDIO) 제외, 18~64세만.
+     *  CAFFEINE 있으면 억제(0.5x)
+     */
     private Rule melatoninRule() {
         return ctx -> {
             Integer age = nvl(ctx.age(), 0);
             if (age < 18 || age >= 65) return Map.of();
 
             LocalTime now = LocalTime.now();
-            boolean isNight = !now.isBefore(LocalTime.of(21, 0)) || !now.isAfter(LocalTime.of(2, 59));
+            boolean isNight = !now.isBefore(LocalTime.of(21, 0))
+                    || !now.isAfter(LocalTime.of(2, 59));
             if (!isNight) return Map.of();
 
             if (!has(ctx.tags(), SLEEP)) return Map.of();
@@ -68,9 +70,10 @@ public class RuleEngine {
         };
     }
 
-    /** Mg: 기본치에서 생활/질환 조건 보정
-     *  🍺 ALCOHOL +10%, ☕ CAFFEINE +10%, 🏃 EXERCISE +15%, 🌙 SLEEP -10%(야간 위장부담↓),
-     *  KIDNEY -50%, PREGNANT -15%  → 80~200mg 클램프 */
+    /** 마그네슘: 기본치에서 생활/질환 조건 보정
+     *  ALCOHOL +10%, CAFFEINE +10%, EXERCISE +15%, SLEEP -10%,
+     *  KIDNEY -50%, PREGNANT -15%
+     */
     private Rule magnesiumRule() {
         return ctx -> {
             double dose = std.magnesiumServingMg(ctx.weight(), ctx.gender());
@@ -88,9 +91,9 @@ public class RuleEngine {
             return Map.of(MAGNESIUM, round1(dose));
         };
     }
-
-    /** Zn: 기본치에서 보정
-     *  🍺 ALCOHOL +20%, 🥗 VEGAN +15%, LIVER -20% → 3~10mg 클램프 */
+    /** 아연: 기본치에서 보정
+     *  ALCOHOL +20%, VEGAN +15%, LIVER -20%
+     */
     private Rule zincRule() {
         return ctx -> {
             double dose = std.zincServingMg(ctx.gender());
@@ -107,8 +110,9 @@ public class RuleEngine {
     }
 
     /** 전해질: 기본치에서 보정
-     *  🏃 EXERCISE +20%, 🍜 SALTY_FOOD -25%,
-     *  CARDIO/KIDNEY → 낮 제한(미배출), 밤만 허용 +30%감량 → 120~300ml 클램프 */
+     *  EXERCISE +20%, SALTY_FOOD -25%,
+     *  CARDIO/KIDNEY → 낮 제한(미배출), 밤만 허용 +30%
+     */
     private Rule electrolyteRule() {
         return ctx -> {
             double vol = std.electrolyteServingMl();
