@@ -93,12 +93,16 @@ public class DbInit {
         p1.addTag(t1);
         p2.addTag(t2);
 
-        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+        Intake i1 = Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
                 {"test":"test1"}
-                """));
-        intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
+                """);
+        i1.markSuccess();
+        intakeRepository.save(i1);
+        Intake i2 = Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
                 {"test":"test2"}
-                """));
+                """);
+        i2.markSuccess();
+        intakeRepository.save(i2);
         intakeRepository.save(Intake.create(p1, dispenser, "TEST1", 10D, 10D, 10D, 10D, """
                 {"test":"test3"}
                 """));
