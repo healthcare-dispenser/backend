@@ -41,7 +41,7 @@ public class DbInit {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void init() {
-        Account a1 = Account.create("a@a.com", passwordEncoder.encode("123"));
+        Account a1 = Account.create("healthcaredispenser@suwon.ac.kr", passwordEncoder.encode("dispenser"));
         Account a2 = Account.create("test", passwordEncoder.encode("test"));
 
         accountRepository.save(a1);
