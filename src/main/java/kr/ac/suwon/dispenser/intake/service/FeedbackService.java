@@ -33,5 +33,9 @@ public class FeedbackService {
         return feedbackRepository.findAllByProfile_IdOrderByCreatedAtDesc(profileId);
     }
 
+    public Feedback findLatestByProfileId(Long profileId) {
+        return feedbackRepository.findTop1ByProfile_IdOrderByCreatedAtDesc(profileId).orElse(null);
+    }
+
 
 }

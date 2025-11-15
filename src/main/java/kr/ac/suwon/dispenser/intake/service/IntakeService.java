@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 import kr.ac.suwon.dispenser.common.mqtt.MqttService;
 import kr.ac.suwon.dispenser.dispenser.domain.Dispenser;
 import kr.ac.suwon.dispenser.dispenser.service.DispenserService;
+import kr.ac.suwon.dispenser.intake.domain.Feedback;
 import kr.ac.suwon.dispenser.intake.domain.Intake;
+import kr.ac.suwon.dispenser.intake.dto.feedback.FeedbackInfo;
 import kr.ac.suwon.dispenser.intake.repository.IntakeRepository;
 import kr.ac.suwon.dispenser.profile.domain.Profile;
 import kr.ac.suwon.dispenser.profile.service.ProfileService;
@@ -28,18 +30,27 @@ public class IntakeService {
     private final IntakeRepository intakeRepository;
     private final ProfileService profileService;
     private final DispenserService dispenserService;
+    private final FeedbackService feedbackService;
     private final RuleEngine ruleEngine;
     private final MqttService mqttService;
 
     public Map<String, Double> getPlan(Long profileId) {
         Profile profile = profileService.findById(profileId);
+        Feedback feedback = feedbackService.findLatestByProfileId(profileId);
+
+        FeedbackInfo feedbackInfo = (feedback == null)
+                ? null
+                : new FeedbackInfo(feedback.getSleepRating(), feedback.getFatigueRating(), feedback.getCreatedAt());
+
         RuleContext ruleContext = new RuleContext(
                 profile.getAge(),
                 profile.getHeight(),
                 profile.getWeight(),
                 profile.getGender(),
                 profile.getTags().stream().map(pt -> pt.getTag().getCode()).collect(Collectors.toSet()),
-                profile.getConditions().stream().map(pc -> pc.getCondition().getCode()).collect(Collectors.toSet()));
+                profile.getConditions().stream().map(pc -> pc.getCondition().getCode()).collect(Collectors.toSet()),
+                feedbackInfo
+        );
 
         return ruleEngine.run(ruleContext);
     }
@@ -52,13 +63,20 @@ public class IntakeService {
 
         log.info("[IntakeService] 요청 수신: profileId=[{}], dispenserUuid=[{}]", profileId, dispenserUuid);
 
+        Feedback feedback = feedbackService.findLatestByProfileId(profileId);
+
+        FeedbackInfo feedbackInfo = (feedback == null)
+                ? null
+                : new FeedbackInfo(feedback.getSleepRating(), feedback.getFatigueRating(), feedback.getCreatedAt());
         RuleContext ruleContext = new RuleContext(
                 profile.getAge(),
                 profile.getHeight(),
                 profile.getWeight(),
                 profile.getGender(),
                 profile.getTags().stream().map(pt -> pt.getTag().getCode()).collect(Collectors.toSet()),
-                profile.getConditions().stream().map(pc -> pc.getCondition().getCode()).collect(Collectors.toSet()));
+                profile.getConditions().stream().map(pc -> pc.getCondition().getCode()).collect(Collectors.toSet()),
+                feedbackInfo
+        );
 
         Map<String, Double> plan = ruleEngine.run(ruleContext);
 

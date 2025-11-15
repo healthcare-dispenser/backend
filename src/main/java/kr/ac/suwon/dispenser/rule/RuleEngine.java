@@ -1,5 +1,7 @@
 package kr.ac.suwon.dispenser.rule;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.time.Duration.*;
+import static java.time.LocalDateTime.*;
 import static kr.ac.suwon.dispenser.profile.domain.condition.ConditionCode.*;
 import static kr.ac.suwon.dispenser.profile.domain.tag.TagCode.*;
 
@@ -36,7 +40,15 @@ public class RuleEngine {
         for (Rule r : rules) {
             r.apply(ctx).forEach((k, v) -> out.merge(k, v, Double::sum));
         }
+
+        Map<String, Double> mul = feedbackMultipliers(ctx);
+        mul.forEach((k, m) -> out.computeIfPresent(k, (kk, v) -> v * m));
+
         capMelatonin(out);
+        out.computeIfPresent(MAGNESIUM,   (k, v) -> clamp(v, 80.0, 200.0));
+        out.computeIfPresent(ZINC,        (k, v) -> clamp(v, 3.0, 10.0));
+        out.computeIfPresent(ELECTROLYTE, (k, v) -> clamp(v, 120.0, 300.0));
+        out.replaceAll((k, v) -> round1(v));
         return Collections.unmodifiableMap(out);
     }
 
@@ -134,6 +146,71 @@ public class RuleEngine {
             vol = clamp(vol, 120.0, 300.0);
             return Map.of(ELECTROLYTE, round1(vol));
         };
+    }
+
+    // ★ ADD: 피드백 → 성분별 배수 계산
+    private Map<String, Double> feedbackMultipliers(RuleContext ctx) {
+        Map<String, Double> mul = new HashMap<>();
+        var fb = ctx.feedbackInfo();
+        if (fb == null) return mul;
+
+        // DTO/record 어떤 형태든 안전하게 꺼내기
+        Integer sleep = safeGet(fb::sleepRating);
+        Integer fatigue = safeGet(fb::fatigueRating);
+        LocalDateTime at = safeGet(fb::latestAt);
+
+        double w = freshnessWeight(at);
+        if (w <= 0 || sleep == null || fatigue == null) return mul;
+
+        int s = clampInt(sleep, 1, 5);
+        int f = clampInt(fatigue, 1, 5);
+
+        // 정책: 수면 나쁨(1~2) → 멜라토닌 +30%, Mg +5% / 수면 좋음(4~5) → 멜라토닌 -20%
+        if (s <= 2) {
+            mergeMul(mul, MELATONIN,  lerp(1.00, 1.30, w));
+            mergeMul(mul, MAGNESIUM,  lerp(1.00, 1.05, w));
+        } else if (s >= 4) {
+            mergeMul(mul, MELATONIN,  lerp(1.00, 0.80, w));
+        }
+
+        // 피로 높음(4~5) → Mg +15%, 전해질 +10% / 피로 낮음(1~2) → Mg -10%
+        if (f >= 4) {
+            mergeMul(mul, MAGNESIUM,   lerp(1.00, 1.15, w));
+            mergeMul(mul, ELECTROLYTE, lerp(1.00, 1.10, w));
+        } else if (f <= 2) {
+            mergeMul(mul, MAGNESIUM,   lerp(1.00, 0.90, w));
+        }
+
+        return mul;
+    }
+
+    // ★ ADD: 신선도 가중치 (24h=1.0, 24~72h=0.5, 그 외=0)
+    private static double freshnessWeight(LocalDateTime t) {
+        if (t == null) return 0.0;
+        long hours = between(t, now()).toHours();
+        if (hours <= 24) return 1.0;
+        if (hours <= 72) return 0.5;
+        return 0.0;
+    }
+
+    // ★ ADD: 배수 합성(같은 키는 곱해서 누적)
+    private static void mergeMul(Map<String, Double> into, String key, double factor) {
+        into.merge(key, factor, (a, b) -> a * b);
+    }
+
+    // ★ ADD: 선형 보간
+    private static double lerp(double from, double to, double w) {
+        return from + (to - from) * w;
+    }
+
+    // ★ ADD: int 클램프
+    private static int clampInt(int v, int min, int max) {
+        return Math.max(min, Math.min(max, v));
+    }
+
+    // ★ ADD: NPE 안전 getter
+    private static <T> T safeGet(java.util.concurrent.Callable<T> c) {
+        try { return c.call(); } catch (Exception e) { return null; }
     }
 
     // ----------------- Post process & utils -----------------
