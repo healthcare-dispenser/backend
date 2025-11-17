@@ -22,9 +22,11 @@ public class Intake {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
     private Profile profile;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dispenser_id")
     private Dispenser dispenser;
 
     private String commandUuid;
